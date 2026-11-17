@@ -1,0 +1,16 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.git/
+.gitignore
+.streamlit/secrets.toml
+*.docx
+!File test systems.docx
+!Mẫu form.docx
+tests/
+scratch/
+run.bat
