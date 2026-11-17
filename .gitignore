@@ -1,0 +1,34 @@
+# Môi trường ảo Python (Virtual Environment)
+venv/
+.venv/
+env/
+ENV/
+
+# File thực thi và binary lớn
+*.exe
+cloudflared.exe
+
+# File biên dịch Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# File cấu hình chứa mật khẩu / API key nhạy cảm
+.env
+.streamlit/secrets.toml
+
+# File tạm và file khóa của Microsoft Word
+~$*.docx
+*.tmp
+
+# File test và file xuất tạm thời (giữ lại Mẫu form.docx)
+File_test_systems_chuan_hoa.docx
+output_test_systems.docx
+test_out.docx
+test_input_sample.docx
+
+# Thư mục log và scratch
+scratch/
+*.log
