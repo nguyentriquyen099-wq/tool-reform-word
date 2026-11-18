@@ -232,11 +232,8 @@ class Config:
     # Các ký hiệu Bullet cần chuẩn hóa
     BULLET_SYMBOLS = ["•", "●", "○", "▪", "❖", "➢", "", "", "★", "–", "—", "*", "►", ""]
 
-    # Chuẩn hóa số Chương sang số La Mã - Mặc định False theo Form mẫu (dùng CHƯƠNG 1, 2, 3 đồng bộ 1.1, 1.2)
-    NORMALIZE_CHAPTER_TO_ROMAN = os.getenv("NORMALIZE_CHAPTER_TO_ROMAN", "False").lower() in ("true", "1", "yes")
-
-    # Chuẩn hóa số Chương sang số La Mã - Mặc định False theo Form mẫu (dùng CHƯƠNG 1, 2, 3 đồng bộ 1.1, 1.2)
-    NORMALIZE_CHAPTER_TO_ROMAN = get_config_value("NORMALIZE_CHAPTER_TO_ROMAN", "False").lower() in ("true", "1", "yes")
+    # Chuẩn hóa số Chương sang số La Mã (dùng CHƯƠNG I, II, III...) - Mặc định True
+    NORMALIZE_CHAPTER_TO_ROMAN = get_config_value("NORMALIZE_CHAPTER_TO_ROMAN", "True").lower() in ("true", "1", "yes")
 
     # Chuẩn hóa chữ hoa cho Heading cấp con (Heading 2, 3...) sang dạng Sentence Case chuẩn
     NORMALIZE_HEADING_CAPS = get_config_value("NORMALIZE_HEADING_CAPS", "True").lower() in ("true", "1", "yes")
@@ -366,5 +363,5 @@ class Config:
         cls.HEADING_SPACE_BEFORE_PT = float(get_config_value("HEADING_SPACE_BEFORE_PT", "6"))
         cls.HEADING_SPACE_AFTER_PT = float(get_config_value("HEADING_SPACE_AFTER_PT", "3"))
 
-        cls.NORMALIZE_CHAPTER_TO_ROMAN = get_config_value("NORMALIZE_CHAPTER_TO_ROMAN", "False").lower() in ("true", "1", "yes")
+        cls.NORMALIZE_CHAPTER_TO_ROMAN = get_config_value("NORMALIZE_CHAPTER_TO_ROMAN", "True").lower() in ("true", "1", "yes")
         cls.NORMALIZE_HEADING_CAPS = get_config_value("NORMALIZE_HEADING_CAPS", "True").lower() in ("true", "1", "yes")

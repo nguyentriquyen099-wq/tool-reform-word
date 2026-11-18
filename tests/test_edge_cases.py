@@ -308,7 +308,7 @@ class TestEdgeCases(unittest.TestCase):
         standardizer = DocumentStandardizer()
         standardizer.process(doc)
 
-        self.assertEqual(doc.paragraphs[0].text, "CHƯƠNG 1: TỔNG QUAN")
+        self.assertEqual(doc.paragraphs[0].text, "CHƯƠNG I: TỔNG QUAN")
         self.assertEqual(doc.paragraphs[1].text, "1.1. Yêu cầu thiết kế")
 
     def test_heuristic_fallback_caption_and_non_toc(self):
