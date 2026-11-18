@@ -85,6 +85,13 @@ with st.sidebar:
 
     st.subheader("🤖 Cấu hình AI DeepSeek")
     env_api_key = Config.DEEPSEEK_API_KEY
+    if not env_api_key:
+        try:
+            if hasattr(st, "secrets") and "DEEPSEEK_API_KEY" in st.secrets:
+                env_api_key = str(st.secrets["DEEPSEEK_API_KEY"]).strip()
+        except Exception:
+            pass
+
     api_key_input = st.text_input(
         "DeepSeek API Key:",
         value=env_api_key,

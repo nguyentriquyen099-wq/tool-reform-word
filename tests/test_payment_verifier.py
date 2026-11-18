@@ -475,56 +475,62 @@ class TestPaymentVerifier(unittest.TestCase):
         import io
         from streamlit.testing.v1 import AppTest
         from pathlib import Path
-        app_path = Path(__file__).parent.parent / "app.py"
-        at = AppTest.from_file(str(app_path))
-        at.run(timeout=10)
-        # Tải file mẫu lên widget
-        at.file_uploader[0].upload("test.docx", b"PK\x03\x04test_docx_data").run(timeout=10)
-        # Thiết lập session_state có kết quả xử lý
-        at.session_state["processed_data"] = {
-            "result": {
-                "buffer": io.BytesIO(b"dummy docx bytes"),
-                "stats": {
-                    "chapters_roman_count": 0,
-                    "headings_casing_normalized_count": 0,
-                    "toc_inserted": False,
-                    "toc_evaluated": False,
-                    "heading_1_count": 1,
-                    "heading_2_count": 1,
-                    "heading_3_count": 0,
-                    "heading_4_count": 0,
-                    "heading_unnumbered_count": 0,
-                    "list_items_count": 0,
-                    "body_paragraphs_count": 5,
-                    "tables_count": 0,
-                    "cover_paragraphs": 0,
-                    "caption_count": 0,
-                    "ai_classified_count": 0,
-                    "processing_time": 0.5,
-                }
-            },
-            "order_code": "BC998877",
-            "order_time": "2026-11-16 22:00:00",
-            "log_records": ["Done"],
-            "filename": "test.docx"
-        }
-        at.session_state["payment_confirmed"] = False
-        at.run(timeout=10)
+        from config import Config
+        old_test_mode = Config.SEPAY_TEST_MODE
+        Config.SEPAY_TEST_MODE = True
+        try:
+            app_path = Path(__file__).parent.parent / "app.py"
+            at = AppTest.from_file(str(app_path))
+            at.run(timeout=10)
+            # Tải file mẫu lên widget
+            at.file_uploader[0].upload("test.docx", b"PK\x03\x04test_docx_data").run(timeout=10)
+            # Thiết lập session_state có kết quả xử lý
+            at.session_state["processed_data"] = {
+                "result": {
+                    "buffer": io.BytesIO(b"dummy docx bytes"),
+                    "stats": {
+                        "chapters_roman_count": 0,
+                        "headings_casing_normalized_count": 0,
+                        "toc_inserted": False,
+                        "toc_evaluated": False,
+                        "heading_1_count": 1,
+                        "heading_2_count": 1,
+                        "heading_3_count": 0,
+                        "heading_4_count": 0,
+                        "heading_unnumbered_count": 0,
+                        "list_items_count": 0,
+                        "body_paragraphs_count": 5,
+                        "tables_count": 0,
+                        "cover_paragraphs": 0,
+                        "caption_count": 0,
+                        "ai_classified_count": 0,
+                        "processing_time": 0.5,
+                    }
+                },
+                "order_code": "BC998877",
+                "order_time": "2026-11-16 22:00:00",
+                "log_records": ["Done"],
+                "filename": "test.docx"
+            }
+            at.session_state["payment_confirmed"] = False
+            at.run(timeout=10)
 
-        # Ban đầu nút tải file bị KHÓA HOÀN TOÀN
-        self.assertEqual(len(at.download_button), 0)
+            # Ban đầu nút tải file bị KHÓA HOÀN TOÀN
+            self.assertEqual(len(at.download_button), 0)
 
-        # Tìm và bấm nút 'Kiểm tra thanh toán ngay'
-        check_btns = [b for b in at.button if "Kiểm tra thanh toán ngay" in b.label]
-        self.assertEqual(len(check_btns), 1)
+            # Tìm và bấm nút 'Kiểm tra thanh toán ngay'
+            check_btns = [b for b in at.button if "Kiểm tra thanh toán ngay" in b.label]
+            self.assertEqual(len(check_btns), 1)
 
-        check_btns[0].click().run(timeout=10)
-        self.assertFalse(at.exception)
+            check_btns[0].click().run(timeout=10)
+            self.assertFalse(at.exception)
 
-        # Sau khi xác nhận thanh toán, payment_confirmed = True và BUNG NÚT TẢI FILE
-        self.assertTrue(at.session_state["payment_confirmed"])
-        self.assertEqual(len(at.download_button), 1)
-        self.assertIn("ChuanHoa_test.docx", at.download_button[0].label)
+            # Sau khi xác nhận thanh toán, payment_confirmed = True và BUNG NÚT TẢI FILE
+            self.assertTrue(at.session_state["payment_confirmed"])
+            self.assertEqual(len(at.download_button), 1)
+            self.assertIn("ChuanHoa_test.docx", at.download_button[0].label)
+        finally:
+            Config.SEPAY_TEST_MODE = old_test_mode
 
 
 if __name__ == "__main__":
